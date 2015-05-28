@@ -43,17 +43,21 @@ public class SystemModel {
 		out = outRaw * (maxSpeed * efficiency);
 
 		
-		filteredVel = vel.calculate(out);
+		// filteredVel = vel.calculate(out);
 		
 		//
 		
 
 		// Attempted physics:
-		// double accel = ((maxForce / load) * 3.2808399)
-		// - (gravity ? 32.1850394 : 0);
-		//
-		// velocity += (accel * outRaw * timeStep);
-		// filteredVel = vel.calculate(velocity);
+		double accel = ((maxForce / load) * 3.2808399)
+				- (gravity ? 32.1850394 : 0);
+
+		if (velocity != out) {
+			velocity += (accel * timeStep) * Math.signum(out);
+		}
+
+		velocity = Math.min(this.maxSpeed, Math.max(-this.maxSpeed, velocity));
+		filteredVel = vel.calculate(velocity);
 		//
     }
     

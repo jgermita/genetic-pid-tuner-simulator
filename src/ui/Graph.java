@@ -37,23 +37,23 @@ import org.jfree.ui.TextAnchor;
  *
  * @author jeremy.germita@gmail.com (Jeremy Germita)
  */
-public class PositionGraph extends ApplicationFrame {
+public class Graph extends ApplicationFrame {
 
 	Gains gains = null;
-	public PositionGraph(final String title, ArrayList<Setpoint> data,
+	public Graph(final String title, ArrayList<Setpoint> data,
 			ArrayList<Setpoint> traj, Gains gains) {
 		super(title);
 		this.gains = gains;
 
 		JFreeChart chart = createChart(data, traj);
 
-		File imageFile = new File("Output" + ".png");
+		File imageFile = new File(ConfigFile.getInstance("config.txt")
+				.getString("outputPng"));
 		int width = 1280;
 		int height = 960;
 
 		try {
 			ChartUtilities.saveChartAsPNG(imageFile, chart, width, height);
-			// System.exit(0);
 		} catch (IOException ex) {
 			System.err.println(ex);
 		}

@@ -7,10 +7,12 @@ package ui;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
@@ -32,9 +34,17 @@ public class FitnessGraph extends ApplicationFrame {
 
 		JFreeChart chart = createChart(createDataset(data));
 
-		File imageFile = new File(System.currentTimeMillis() + ".png");
+		File imageFile = new File(ConfigFile.getInstance("config.txt")
+				.getString("outputFitness"));
 		int width = 1280;
 		int height = 960;
+
+		try {
+			ChartUtilities.saveChartAsPNG(imageFile, chart, width, height);
+			// System.exit(0);
+		} catch (IOException ex) {
+			System.err.println(ex);
+		}
 
 		final ChartPanel panel = new ChartPanel(chart);
 		panel.setPreferredSize(new java.awt.Dimension(1500, 800));

@@ -8,9 +8,10 @@ package geneticpidtuner;
 import java.util.ArrayList;
 
 import ui.ConfigDialog;
+import ui.ConfigFile;
 import ui.FitnessGraph;
+import ui.Graph;
 import ui.PlotFile;
-import ui.PositionGraph;
 
 /**
  *
@@ -37,16 +38,19 @@ public class GeneticPIDTuner {
      */
     public static void main(String[] args) {
 
-		// while (true) {
 
+
+		ConfigFile cfg = ConfigFile.getInstance("config.txt");
 		ConfigDialog dia = new ConfigDialog();
-
-
 
         System.out.println("Genetic PID TUNER");
 
 		double timeStep = dia.loopTime;
-		SystemModel sys = new SystemModel(1, 300.0, 1.0, 25.0, timeStep, true);
+
+
+		SystemModel sys = new SystemModel(cfg.getValue("speed"),
+				cfg.getValue("force"), cfg.getValue("efficiency"),
+				cfg.getValue("load"), timeStep, false);
 
         ArrayList<Setpoint> traj = new ArrayList();
 
@@ -54,11 +58,10 @@ public class GeneticPIDTuner {
 		// traj.add(new Setpoint((double) i * 5, (Math.random() * 50)));
 		// }
 
-		traj.add(new Setpoint(0.0, 5));
-		traj.add(new Setpoint(5.0, 10));
-		traj.add(new Setpoint(10.0, 15));
-		traj.add(new Setpoint(15.0, 0.0));
-		traj.add(new Setpoint(20.0, 0.0));
+		traj.add(new Setpoint(0.0, 1));
+		traj.add(new Setpoint(10.0, 0));
+		traj.add(new Setpoint(20.0, 1));
+		traj.add(new Setpoint(30.0, 0));
 
 		int population = dia.population;
 
@@ -119,7 +122,7 @@ public class GeneticPIDTuner {
 
         System.out.println("Creating plot...");
 		try {
-			PlotFile out = new PlotFile(plot, "out.csv");
+			PlotFile out = new PlotFile(plot, cfg.getString("outputCsv"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,7 +132,7 @@ public class GeneticPIDTuner {
 			fg.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 			fg.setVisible(true);
 		}
-			final PositionGraph graph = new PositionGraph("position v time",
+			final Graph graph = new Graph("position v time",
 					plot, traj, mostFit);
 
 		graph.pack();
@@ -146,7 +149,7 @@ public class GeneticPIDTuner {
 
 
     }
-	// }
+
 
 }
 

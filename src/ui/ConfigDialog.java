@@ -17,12 +17,15 @@ import org.jfree.ui.ApplicationFrame;
 
 public class ConfigDialog extends ApplicationFrame {
 
-	public int generations = 10;
-	public int population = 100;
-	public double loopTime = 0.001;
-	public double kP = 0.0;
-	public double kI = 0.0;
-	public double kD = 0.0;
+	public int generations = (int) ConfigFile.getInstance("config.txt")
+			.getValue("genField");
+	public int population = (int) ConfigFile.getInstance("config.txt")
+			.getValue("popField");
+	public double loopTime = ConfigFile.getInstance("config.txt").getValue(
+			"loopField");
+	public double kP = ConfigFile.getInstance("config.txt").getValue("pField");
+	public double kI = ConfigFile.getInstance("config.txt").getValue("iField");
+	public double kD = ConfigFile.getInstance("config.txt").getValue("dField");
 
 	public int mode = 0;
 
@@ -75,8 +78,10 @@ public class ConfigDialog extends ApplicationFrame {
 
 			if (mode == 0) {
 				System.out.println("Mode: Genetic simulator");
+				loopTime = getText(loopField, loopTime);
 			} else if (mode == 1) {
 				System.out.println("Mode: Single gain simulator");
+				getText(loopField2, loopTime);
 			} else {
 				System.out.println("Mode: " + mode);
 			}
@@ -101,7 +106,8 @@ public class ConfigDialog extends ApplicationFrame {
 
 	private JPanel getGenConfigPanel() {
 		JPanel gcr = new JPanel(new BorderLayout());
-		popField.setText(Integer.toString(this.population));
+		popField.setText(ConfigFile.getInstance("config.txt").getString(
+				"popField"));
 		popField.setMaximumSize(new Dimension(Integer.MAX_VALUE, popField
 				.getPreferredSize().height));
 		popField.addFocusListener(new FocusListener() {
@@ -114,7 +120,8 @@ public class ConfigDialog extends ApplicationFrame {
 			}
 		});
 
-		genField.setText(Integer.toString(this.generations));
+		genField.setText(ConfigFile.getInstance("config.txt").getString(
+				"genField"));
 		genField.setMaximumSize(new Dimension(Integer.MAX_VALUE, genField
 				.getPreferredSize().height));
 		genField.addFocusListener(new FocusListener() {
@@ -126,7 +133,8 @@ public class ConfigDialog extends ApplicationFrame {
 
 			}
 		});
-		loopField.setText("0.001");
+		loopField.setText(ConfigFile.getInstance("config.txt").getString(
+				"loopField"));
 		loopField.setMaximumSize(new Dimension(Integer.MAX_VALUE, loopField
 				.getPreferredSize().height));
 		loopField.addFocusListener(new FocusListener() {
@@ -164,7 +172,7 @@ public class ConfigDialog extends ApplicationFrame {
 	public JPanel getSimConfigPanel() {
 		JPanel scp = new JPanel(new BorderLayout());
 
-		pField.setText("0.0");
+		pField.setText(ConfigFile.getInstance("config.txt").getString("pField"));
 		pField.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				pField.setText("");
@@ -175,7 +183,7 @@ public class ConfigDialog extends ApplicationFrame {
 			}
 		});
 
-		iField.setText("0.0");
+		iField.setText(ConfigFile.getInstance("config.txt").getString("iField"));
 		iField.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				iField.setText("");
@@ -186,7 +194,7 @@ public class ConfigDialog extends ApplicationFrame {
 			}
 		});
 
-		dField.setText("0.0");
+		dField.setText(ConfigFile.getInstance("config.txt").getString("dField"));
 		dField.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				dField.setText("");
@@ -196,7 +204,8 @@ public class ConfigDialog extends ApplicationFrame {
 
 			}
 		});
-		loopField2.setText("0.001");
+		loopField2.setText(ConfigFile.getInstance("config.txt").getString(
+				"loopField"));
 
 		scp.setLayout(new BoxLayout(scp,
 				BoxLayout.PAGE_AXIS));
