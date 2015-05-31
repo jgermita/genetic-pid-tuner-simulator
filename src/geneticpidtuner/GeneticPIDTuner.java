@@ -5,6 +5,7 @@
  */
 package geneticpidtuner;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import ui.ConfigDialog;
@@ -12,6 +13,7 @@ import ui.ConfigFile;
 import ui.FitnessGraph;
 import ui.Graph;
 import ui.PlotFile;
+import ui.TrajectoryFile;
 
 /**
  *
@@ -38,30 +40,17 @@ public class GeneticPIDTuner {
      */
     public static void main(String[] args) {
 
-
-
 		ConfigFile cfg = ConfigFile.getInstance("config.txt");
 		ConfigDialog dia = new ConfigDialog();
 
-        System.out.println("Genetic PID TUNER");
-
 		double timeStep = dia.loopTime;
-
 
 		SystemModel sys = new SystemModel(cfg.getValue("speed"),
 				cfg.getValue("force"), cfg.getValue("efficiency"),
 				cfg.getValue("load"), timeStep, false);
 
-        ArrayList<Setpoint> traj = new ArrayList();
-
-		// for (int i = 1; i < 5; i++) {
-		// traj.add(new Setpoint((double) i * 5, (Math.random() * 50)));
-		// }
-
-		traj.add(new Setpoint(0.0, 1));
-		traj.add(new Setpoint(10.0, 0));
-		traj.add(new Setpoint(20.0, 1));
-		traj.add(new Setpoint(30.0, 0));
+		ArrayList<Setpoint> traj = TrajectoryFile.getInstance("trajectory.csv")
+				.getTrajectory();
 
 		int population = dia.population;
 
@@ -117,7 +106,7 @@ public class GeneticPIDTuner {
 		System.out.println("Best gains: "
 				+ mostFit.toString()
 				+ "\tFitness: "
-				+ sim.getFitness());
+				+ new DecimalFormat("#.####").format(sim.getFitness()));
 		ArrayList<Setpoint> plot = sim.getOutputTrajectory();
 
         System.out.println("Creating plot...");
@@ -140,7 +129,7 @@ public class GeneticPIDTuner {
 		graph.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		graph.setVisible(true);
 
-		// final VelocityGraph vg = new VelocityGraph("vel v time", plot);
+		// final VelocityGraph vg = new VelocityGraph("accelFilter v time", plot);
 		// vg.pack();
 		// vg.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		// vg.setVisible(true);

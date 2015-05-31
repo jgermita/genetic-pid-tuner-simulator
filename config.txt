@@ -1,0 +1,20 @@
+trajectoryFile=trajectory.csv
+
+// System configuration:
+speed=11.0
+force=200.0
+efficiency=1.0
+load=130
+
+// File output configuration:
+outputPng=output.png
+outputCsv=output.csv
+outputFitness=fitness.png
+
+//UI default values:
+popField=100
+genField=50
+loopField=0.001
+pField=5.0
+iField=0.0
+dField=0.0

@@ -2,11 +2,14 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,10 +35,17 @@ public class ConfigDialog extends ApplicationFrame {
 	JTextField genField = new JTextField(5);
 	JTextField popField = new JTextField(5);
 	JTextField loopField = new JTextField(5);
-	JTextField loopField2 = new JTextField(5);
+
 	JTextField pField = new JTextField(5);
 	JTextField iField = new JTextField(5);
 	JTextField dField = new JTextField(5);
+
+	JTextField speedField = new JTextField(5);
+	JTextField forceField = new JTextField(5);
+	JTextField effField = new JTextField(5);
+	JTextField loadField = new JTextField(5);
+
+	JButton loadDefaultsButton = new JButton("Load Defaults");
 
 	public ConfigDialog() {
 		super("Genetic PID Tuner");
@@ -81,7 +91,7 @@ public class ConfigDialog extends ApplicationFrame {
 				loopTime = getText(loopField, loopTime);
 			} else if (mode == 1) {
 				System.out.println("Mode: Single gain simulator");
-				getText(loopField2, loopTime);
+				getText(loopField, loopTime);
 			} else {
 				System.out.println("Mode: " + mode);
 			}
@@ -110,42 +120,14 @@ public class ConfigDialog extends ApplicationFrame {
 				"popField"));
 		popField.setMaximumSize(new Dimension(Integer.MAX_VALUE, popField
 				.getPreferredSize().height));
-		popField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				popField.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
+		addOnFocusListener(popField);
 
 		genField.setText(ConfigFile.getInstance("config.txt").getString(
 				"genField"));
 		genField.setMaximumSize(new Dimension(Integer.MAX_VALUE, genField
 				.getPreferredSize().height));
-		genField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				genField.setText("");
-			}
+		addOnFocusListener(genField);
 
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
-		loopField.setText(ConfigFile.getInstance("config.txt").getString(
-				"loopField"));
-		loopField.setMaximumSize(new Dimension(Integer.MAX_VALUE, loopField
-				.getPreferredSize().height));
-		loopField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				loopField.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
 
 
 		gcr.setLayout(new BoxLayout(gcr,
@@ -161,8 +143,6 @@ public class ConfigDialog extends ApplicationFrame {
 		gcr.add(genField);
 		gcr.add(Box.createVerticalStrut(15));
 
-		gcr.add(new JLabel("Loop execution time:"));
-		gcr.add(loopField);
 		gcr.add(Box.createVerticalStrut(15));
 
 		return gcr;
@@ -173,39 +153,13 @@ public class ConfigDialog extends ApplicationFrame {
 		JPanel scp = new JPanel(new BorderLayout());
 
 		pField.setText(ConfigFile.getInstance("config.txt").getString("pField"));
-		pField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				pField.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
+		addOnFocusListener(pField);
 
 		iField.setText(ConfigFile.getInstance("config.txt").getString("iField"));
-		iField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				iField.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
+		addOnFocusListener(iField);
 
 		dField.setText(ConfigFile.getInstance("config.txt").getString("dField"));
-		dField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				dField.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
-		loopField2.setText(ConfigFile.getInstance("config.txt").getString(
-				"loopField"));
+		addOnFocusListener(dField);
 
 		scp.setLayout(new BoxLayout(scp,
 				BoxLayout.PAGE_AXIS));
@@ -224,15 +178,84 @@ public class ConfigDialog extends ApplicationFrame {
 		scp.add(dField);
 		scp.add(Box.createVerticalStrut(15));
 
-		scp.add(new JLabel("Loop execution time:"));
-		scp.add(loopField2);
-		scp.add(Box.createVerticalStrut(15));
 
 		return scp;
 	}
 
 	public JPanel getSysConfigPanel() {
-		return new JPanel();
+		JPanel scp = new JPanel(new BorderLayout());
+		speedField.setText(ConfigFile.getInstance("config.txt").getString(
+				"speed"));
+		addOnFocusListener(speedField);
+
+		forceField.setText(ConfigFile.getInstance("config.txt").getString(
+				"force"));
+		addOnFocusListener(forceField);
+
+		effField.setText(ConfigFile.getInstance("config.txt").getString(
+				"efficiency"));
+		addOnFocusListener(effField);
+
+		loadField.setText(ConfigFile.getInstance("config.txt")
+				.getString("load"));
+		addOnFocusListener(loadField);
+
+
+		loopField.setText(ConfigFile.getInstance("config.txt").getString(
+				"loopField"));
+		loopField.setMaximumSize(new Dimension(Integer.MAX_VALUE, loopField
+				.getPreferredSize().height));
+		addOnFocusListener(loopField);
+
+		loadDefaultsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				speedField.setText(ConfigFile.getInstance("config.txt")
+						.getString("speed"));
+				forceField.setText(ConfigFile.getInstance("config.txt")
+						.getString("force"));
+				effField.setText(ConfigFile.getInstance("config.txt")
+						.getString("efficiency"));
+				loadField.setText(ConfigFile.getInstance("config.txt")
+						.getString("load"));
+
+			}
+		});
+
+		scp.setLayout(new BoxLayout(scp, BoxLayout.PAGE_AXIS));
+		scp.add(new JLabel("Single Gain set simulator"));
+		scp.add(Box.createVerticalStrut(15));
+
+		scp.add(new JLabel("Speed:"));
+		scp.add(speedField);
+		scp.add(Box.createVerticalStrut(15));
+
+		scp.add(new JLabel("Force:"));
+		scp.add(forceField);
+		scp.add(Box.createVerticalStrut(15));
+
+		scp.add(new JLabel("Efficiency:"));
+		scp.add(effField);
+		scp.add(Box.createVerticalStrut(15));
+
+		scp.add(new JLabel("Loop execution time:"));
+		scp.add(loopField);
+		scp.add(Box.createVerticalStrut(15));
+
+		scp.add(loadDefaultsButton);
+
+		return scp;
+	}
+
+	private void addOnFocusListener(JTextField field) {
+		field.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				field.setText("");
+			}
+
+			public void focusLost(FocusEvent e) {
+
+			}
+		});
 	}
 
 }

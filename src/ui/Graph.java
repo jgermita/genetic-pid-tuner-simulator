@@ -178,7 +178,7 @@ public class Graph extends ApplicationFrame {
 
 		// change the auto tick unit selection to integer units only...
 		final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		rangeAxis.setAutoRange(true);
 		// OPTIONAL CUSTOMISATION COMPLETED.
 
 		return chart;

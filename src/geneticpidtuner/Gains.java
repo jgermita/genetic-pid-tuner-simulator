@@ -17,8 +17,8 @@ public class Gains {
 
     public Gains(double p, double i, double d) {
         this.kP = p;
-        this.kI = i;
-        this.kD = d;
+		this.kI = 0;
+		this.kD = d;
     }
 
     public String toString() {

@@ -20,7 +20,7 @@ public class SystemModel {
 	private double timeStep = 0.002;
 	private boolean gravity = false;
 
-	private int filter_size = 10;
+	private int filter_size = 20;
 
 
 	public SystemModel(double maxSpeed, double maxForce, double efficiency,
@@ -34,16 +34,18 @@ public class SystemModel {
 		this.gravity = grav;
     }
 
-	MovingAverage vel = new MovingAverage(filter_size);
+	MovingAverage accelFilter = new MovingAverage(filter_size);
 	double velocity = 0.0;
-	double filteredVel = 0.0;
+	double filteredAccel = 0.0;
+	double deadband = 0.005;
 
 	public void calculateVelocity(double out) {
 		double outRaw = Math.min(1.0, (Math.max(-1.0, out)));
+
 		out = outRaw * (maxSpeed * efficiency);
 
 		
-		// filteredVel = vel.calculate(out);
+		// filteredAccel = accelFilter.calculate(out);
 		
 		//
 		
@@ -52,22 +54,25 @@ public class SystemModel {
 		double accel = ((maxForce / load) * 3.2808399)
 				- (gravity ? 32.1850394 : 0);
 
+
 		if (velocity != out) {
-			velocity += (accel * timeStep) * Math.signum(out);
+			velocity += accelFilter.calculate((accel * timeStep * Math
+					.signum(out)));
 		}
 
 		velocity = Math.min(this.maxSpeed, Math.max(-this.maxSpeed, velocity));
-		filteredVel = vel.calculate(velocity);
+
+
 		//
     }
     
 	public double getVelocity() {
-		return filteredVel;
+		return velocity;
 	}
 
 	public void reset() {
 		velocity = 0;
-		vel = new MovingAverage(filter_size);
+		accelFilter = new MovingAverage(filter_size);
 	}
 
 }

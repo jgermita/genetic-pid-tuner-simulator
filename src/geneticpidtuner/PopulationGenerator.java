@@ -34,7 +34,7 @@ public class PopulationGenerator {
         return pop;
     }
 
-	private static double MUTATION_PROB = 0.3;
+	private static double MUTATION_PROB = 0.2;
 
     public static ArrayList<Gains> generate(int size, Gains parentA, Gains parentB) {
         ArrayList<Gains> pop = new ArrayList();
@@ -76,14 +76,46 @@ public class PopulationGenerator {
 				// cD *= (Math.random() + 0.5);
             } else {
 
-				if (Math.random() < 0.5) {
+				if (Math.random() < 0.4) {
 					cP = (parentA.kP + parentB.kP) / 2;
 					cI = (parentA.kI + parentB.kI) / 2;
 					cD = (parentA.kD + parentB.kD) / 2;
+					double ran = Math.random();
+					if (ran < 1.0 / 6.0) {
+						cP = Math.random() * MAX_GAIN;
+					} else if (ran < 2.0 / 6.0) {
+
+						cI = Math.random() * MAX_GAIN;
+					} else if (ran < 3.0 / 6.0) {
+
+						cD = Math.random() * MAX_GAIN;
+					} else if (ran < 4.0 / 6.0) {
+						cP = Math.random() * MAX_GAIN;
+						cI = Math.random() * MAX_GAIN;
+						cD = parentB.kD;
+					} else if (ran < 5.0 / 6.0) {
+						cP = Math.random() * MAX_GAIN;
+						cI = parentB.kI;
+						cD = Math.random() * MAX_GAIN;
+					} else {
+						cP = parentB.kP;
+						cI = Math.random() * MAX_GAIN;
+						cD = Math.random() * MAX_GAIN;
+					}
+
 				} else {
 					cP = Math.random() * MAX_GAIN;
 					cI = Math.random() * MAX_GAIN;
 					cD = Math.random() * MAX_GAIN;
+					double ran = Math.random();
+					if (ran < 1.0 / 3.0) {
+						cI = 0;
+					} else if (ran < 2.0 / 3.0) {
+						cD = 0;
+					} else {
+						cI = 0;
+						cD = 0;
+					}
 				}
 
 				// cP *= Math.random();
