@@ -45,9 +45,8 @@ public class GeneticPIDTuner {
 
 		double timeStep = dia.loopTime;
 
-		SystemModel sys = new SystemModel(cfg.getValue("speed"),
-				cfg.getValue("force"), cfg.getValue("efficiency"),
-				cfg.getValue("load"), timeStep, false);
+		SystemModel sys = new SystemModel(dia.speed, dia.force, dia.eff,
+				dia.load, timeStep, false);
 
 		ArrayList<Setpoint> traj = TrajectoryFile.getInstance("trajectory.csv")
 				.getTrajectory();
