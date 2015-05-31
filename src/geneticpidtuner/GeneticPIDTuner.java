@@ -8,6 +8,10 @@ package geneticpidtuner;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+
 import ui.ConfigDialog;
 import ui.ConfigFile;
 import ui.FitnessGraph;
@@ -24,11 +28,37 @@ public class GeneticPIDTuner {
 
 	static class ProgressThread extends Thread {
 		int prevProg = 0;
+
+		JProgressBar bar;
 		public void run() {
+			bar = new JProgressBar();
+		    bar.setMinimum(0);
+		    bar.setMaximum(100);
+		    
+		    JFrame frame = new JFrame("Progress...");
+		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		    frame.add(bar);
+		    frame.pack();
+		    frame.setVisible(true);
+
 			while(this.isAlive()) {
-				
+
 				if (progress < 100 && prevProg != progress) {
 					System.out.println(progress + "% done...");
+					try {
+						SwingUtilities.invokeLater(new Runnable() {
+				          public void run() {
+								bar.setValue(progress);
+								;
+							}
+				        });
+				        java.lang.Thread.sleep(100);
+				      } catch (InterruptedException e) {
+				        ;
+				      }
+				}
+				if (progress >= 100) {
+					frame.dispose();
 				}
 				prevProg = progress;
 			}
